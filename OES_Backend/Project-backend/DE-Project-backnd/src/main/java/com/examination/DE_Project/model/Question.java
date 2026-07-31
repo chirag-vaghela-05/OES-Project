@@ -1,45 +1,39 @@
 package com.examination.DE_Project.model;
-
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-
 public class Question {
 
-
     @Id
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     long id;
 
-    String content_question;
-    String option_a;
-    String option_b;
-    String option_c;
-    String option_d;
-    String correct_ans;
-    int marks_question;
+
+//    @JsonProperty("content_question")
+    private String text;
+
+    private String optionA;
+
+    private String optionB;
+
+    private String optionC;
+
+    private String optionD;
+
+    private String correctOption;
+
+    //@JsonProperty("marks_question")
+    private int marks;
+
+    private int timePerQuestion;
+
 
     @ManyToOne
     @JoinColumn(name = "paper_id")
+    @JsonIgnore
     private Paper paper;
-    int time_question;
-    //time feature is required
 
-    public String getContent_question() {
-        return content_question;
-    }
-
-    public void setContent_question(String content_question) {
-        this.content_question = content_question;
-    }
-
-    public String getCorrect_ans() {
-        return correct_ans;
-    }
-
-    public void setCorrect_ans(String correct_ans) {
-        this.correct_ans = correct_ans;
-    }
 
     public long getId() {
         return id;
@@ -49,53 +43,78 @@ public class Question {
         this.id = id;
     }
 
-    public int getMarks_question() {
-        return marks_question;
+
+    public String getText() {
+        return text;
     }
 
-    public void setMarks_question(int marks_question) {
-        this.marks_question = marks_question;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public String getOption_a() {
-        return option_a;
+
+    public String getOptionA() {
+        return optionA;
     }
 
-    public void setOption_a(String option_a) {
-        this.option_a = option_a;
+    public void setOptionA(String optionA) {
+        this.optionA = optionA;
     }
 
-    public String getOption_b() {
-        return option_b;
+
+    public String getOptionB() {
+        return optionB;
     }
 
-    public void setOption_b(String option_b) {
-        this.option_b = option_b;
+    public void setOptionB(String optionB) {
+        this.optionB = optionB;
     }
 
-    public String getOption_c() {
-        return option_c;
+
+    public String getOptionC() {
+        return optionC;
     }
 
-    public void setOption_c(String option_c) {
-        this.option_c = option_c;
+    public void setOptionC(String optionC) {
+        this.optionC = optionC;
     }
 
-    public String getOption_d() {
-        return option_d;
+
+    public String getOptionD() {
+        return optionD;
     }
 
-    public void setOption_d(String option_d) {
-        this.option_d = option_d;
+    public void setOptionD(String optionD) {
+        this.optionD = optionD;
     }
 
-    public int getTime_question() {
-        return time_question;
+
+    public String getCorrectOption() {
+        return correctOption;
     }
 
-    public void setTime_question(int time_question) {
-        this.time_question = time_question;
+    public void setCorrectOption(String correctOption) {
+        this.correctOption = correctOption;
     }
+
+
+    public int getMarks() {
+        return marks;
+    }
+
+    public void setMarks(int marks) {
+        this.marks = marks;
+    }
+
+
+    public int getTimePerQuestion() {
+        return timePerQuestion;
+    }
+
+    public void setTimePerQuestion(int timePerQuestion) {
+        this.timePerQuestion = timePerQuestion;
+    }
+
 
     public Paper getPaper() {
         return paper;

@@ -31,6 +31,7 @@ public class Student_panel {
     public List<Paper> total_paper(){
         return service_paper.getallpaper();
     }
+
     @GetMapping("/available_exam/exam/{paperid}")
     public List<Question> exam(@PathVariable long paper_id){
         return service_paper.getQuestion(paper_id);

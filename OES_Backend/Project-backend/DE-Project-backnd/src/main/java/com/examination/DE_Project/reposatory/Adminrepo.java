@@ -1,11 +1,13 @@
 package com.examination.DE_Project.reposatory;
 
-import com.examination.DE_Project.model.Student;
+import com.examination.DE_Project.model.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.Optional;
 
-@Repository
-public interface Studentrepo extends JpaRepository<Student,Long> {
-    Optional<Student> findByEmail(String email);
+
+public interface Adminrepo extends JpaRepository<Admin, Long> {
+
+    Optional<Admin> findByEmail(String email);
 }

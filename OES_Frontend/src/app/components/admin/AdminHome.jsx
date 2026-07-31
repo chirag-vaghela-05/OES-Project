@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { FileQuestion, FileText, Users, CheckCircle } from 'lucide-react';
+import axios from "axios";
 
 export const AdminHome = () => {
   const [stats, setStats] = useState({
@@ -10,19 +11,31 @@ export const AdminHome = () => {
     totalAttempts: 0,
   });
 
-  useEffect(() => {
-    const questions = JSON.parse(localStorage.getItem('questions') || '[]');
-    const papers = JSON.parse(localStorage.getItem('papers') || '[]');
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const attempts = JSON.parse(localStorage.getItem('examAttempts') || '[]');
+ useEffect(() => {
+  loadStats();
+}, []);
+
+
+const loadStats = async () => {
+  try {
+    const [questionsRes, papersRes, studentsRes, resultsRes] =
+      await Promise.all([
+        axios.get("http://localhost:8080/admin/questions"),
+        axios.get("http://localhost:8080/admin/paper"),
+        axios.get("http://localhost:8080/admin/studentlist"),
+        axios.get("http://localhost:8080/admin/result"),
+      ]);
 
     setStats({
-      totalQuestions: questions.length,
-      totalPapers: papers.length,
-      totalStudents: users.filter((u) => u.role === 'STUDENT').length,
-      totalAttempts: attempts.length,
+      totalQuestions: questionsRes.data.length,
+      totalPapers: papersRes.data.length,
+      totalStudents: studentsRes.data.length,
+      totalAttempts: resultsRes.data.length,
     });
-  }, []);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   const statCards = [
     {

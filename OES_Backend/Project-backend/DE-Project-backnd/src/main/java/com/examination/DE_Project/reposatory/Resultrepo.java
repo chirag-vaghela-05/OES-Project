@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface Resultrepo extends JpaRepository<Result,Long> {
-
-    List<Result> findByStudentId(long studentId);
+    List<Result> findByUserId(long userId);
 }

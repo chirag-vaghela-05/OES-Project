@@ -1,5 +1,7 @@
 package com.examination.DE_Project.controler;
-
+import com.examination.DE_Project.dto.LoginRequestDTO;
+import com.examination.DE_Project.dto.LoginResponseDTO;
+import com.examination.DE_Project.dto.PaperRequestDTO;
 import com.examination.DE_Project.model.Result;
 import com.examination.DE_Project.model.Paper;
 import com.examination.DE_Project.model.Question;
@@ -59,11 +61,18 @@ public class Admin_panel {
         //list of paper
         return service_paper.getallpaper();
     }
+//
+//    @PostMapping("/paper/create")
+//    public Paper createpaper(@RequestBody Paper paper){
+//        return service_paper.createpaper(paper);
+//    }
 
-    @PostMapping("/paper/create")
-    public void createpaper(@RequestBody Paper paper){
-        service_paper.createpaper(paper);
-    }
+@PostMapping("/paper/create")
+public Paper createpaper(@RequestBody PaperRequestDTO paperRequestDTO){
+
+    return service_paper.createpaper(paperRequestDTO);
+
+}
 
     //student method
 
@@ -93,4 +102,10 @@ public class Admin_panel {
         return service_attempt.getallresult();
     }
 
+    @PostMapping("/login")
+    public LoginResponseDTO login(@RequestBody LoginRequestDTO request) {
+
+        return service_student.login(request);
+
+    }
 }

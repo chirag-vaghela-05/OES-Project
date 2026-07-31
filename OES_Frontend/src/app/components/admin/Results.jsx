@@ -4,32 +4,30 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Button } from '../ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Eye, BarChart3 } from 'lucide-react';
+import axios from "axios";
+import { toast } from "sonner";
 
 export const Results = () => {
   const [attempts, setAttempts] = useState([]);
   const [selectedAttempt, setSelectedAttempt] = useState(null);
-  const [users, setUsers] = useState([]);
-  const [papers, setPapers] = useState([]);
-  const [questions, setQuestions] = useState([]);
+  
 
   useEffect(() => {
-    loadData();
-  }, []);
+  loadResults();
+}, []);
+  
 
-  const loadData = () => {
-    setAttempts(JSON.parse(localStorage.getItem('examAttempts') || '[]'));
-    setUsers(JSON.parse(localStorage.getItem('users') || '[]'));
-    setPapers(JSON.parse(localStorage.getItem('papers') || '[]'));
-    setQuestions(JSON.parse(localStorage.getItem('questions') || '[]'));
-  };
+const loadResults = async () => {
+  try {
+    const response = await axios.get("http://localhost:8080/admin/result");
+    setAttempts(response.data);
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to load results");
+  }
+};
 
-  const getStudentName = (userId) => {
-    return users.find(u => u.id === userId)?.name || 'Unknown';
-  };
-
-  const getPaperTitle = (paperId) => {
-    return papers.find(p => p.id === paperId)?.title || 'Unknown';
-  };
+ 
 
   const viewDetails = (attempt) => {
     setSelectedAttempt(attempt);

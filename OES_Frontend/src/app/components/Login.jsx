@@ -19,20 +19,20 @@ export const Login = () => {
     e.preventDefault();
     setLoading(true);
 
-    const success = await login(email, password);
+   const userSession = await login(email, password);
 
-    if (success) {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      toast.success('Login successful!');
+if (userSession) {
+  toast.success("Login successful!");
 
-      if (currentUser.role === 'ADMIN') {
-        navigate('/admin');
-      } else {
-        navigate('/student');
-      }
-    } else {
-      toast.error('Invalid email or password');
-    }
+  if (userSession.role === "ADMIN") {
+    navigate("/admin");
+  } else {
+    navigate("/student");
+  }
+
+} else {
+  toast.error("Invalid email or password");
+}
 
     setLoading(false);
   };

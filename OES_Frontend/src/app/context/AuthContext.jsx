@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import bcrypt from 'bcryptjs';
+import axios from "axios";
 
 const AuthContext = createContext(undefined);
 
@@ -22,39 +22,37 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = async (email, password) => {
-    try {
-      // Get users from localStorage
-      const usersData = localStorage.getItem('users');
-      const users = usersData ? JSON.parse(usersData) : [];
 
-      const foundUser = users.find((u) => u.email === email);
-      
-      if (!foundUser) {
-        return false;
-      }
+const login = async (email, password) => {
+  try {
 
-      // Compare password with bcrypt
-      const passwordMatch = await bcrypt.compare(password, foundUser.passwordHash);
-      
-      if (passwordMatch) {
-        const userSession = {
-          id: foundUser.id,
-          name: foundUser.name,
-          email: foundUser.email,
-          role: foundUser.role,
-        };
-        setUser(userSession);
-        localStorage.setItem('currentUser', JSON.stringify(userSession));
-        return true;
+    const response = await axios.post(
+      "http://localhost:8080/admin/login",
+      {
+        email,
+        password,
       }
-      
-      return false;
-    } catch (error) {
-      console.error('Login error:', error);
-      return false;
-    }
-  };
+    );
+
+    const userSession = response.data;
+
+    setUser(userSession);
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(userSession)
+    );
+
+    return userSession;
+
+  } catch (error) {
+
+    console.error(error);
+
+    return null;
+
+  }
+};
 
   const logout = () => {
     setUser(null);

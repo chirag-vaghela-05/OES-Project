@@ -1,14 +1,13 @@
 package com.examination.DE_Project.service;
 
+
 import com.examination.DE_Project.model.*;
-import com.examination.DE_Project.reposatory.Questionrepo;
 import com.examination.DE_Project.reposatory.Responserepo;
 import com.examination.DE_Project.reposatory.Resultrepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashMap;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -35,30 +34,25 @@ public class Resultservice {
         for(StudentAnswer answer : answers){
             Question question= answer.getQuestion();
 
-            totalMark+= question.getMarks_question();
+            totalMark+= question.getMarks();
 
             //check answer
 
-            if(question.getCorrect_ans().equalsIgnoreCase(answer.getSelectedAnswer())){
-                achieve += question.getMarks_question();
+            if(question.getCorrectOption().equalsIgnoreCase(answer.getSelectedAnswer())){
+                achieve += question.getMarks();
             }
         }
         //save result
         Result result=new Result();
 
-        result.setStudentId(studentId);
-        result.setPaper_id(paperId);
+        result.setUserId(studentId);
+        result.setPaperId(paperId);
 
-        result.setStudent_name(answers.get(0).getStudent().getStudent_name());
 
-        result.setPaper_name(answers.get(0).getPaper().getPaper_title());
+        result.setTotalMarks(totalMark);
+        result.setScore(achieve);
 
-        result.setTotal_marks(totalMark);
-        result.setAchieve_marks(achieve);
-
-        result.setAttempts_date(new Date());
-
-        result.setAttempt(1);
+        result.setStartTime(LocalDateTime.now());
 
         return repo_result.save(result);
 
@@ -68,7 +62,7 @@ public class Resultservice {
         return repo_result.findAll();
     }
     public List<Result> getAllByStudentId(long studentId){
-        return repo_result.findByStudentId(studentId);
+        return repo_result.findByUserId(studentId);
     }
     public Result getResultById(long resultId){
         return repo_result.findById(resultId).orElseThrow(() -> new RuntimeException("Result not found"));

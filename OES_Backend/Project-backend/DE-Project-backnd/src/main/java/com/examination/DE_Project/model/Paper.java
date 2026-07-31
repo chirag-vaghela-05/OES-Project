@@ -2,7 +2,9 @@ package com.examination.DE_Project.model;
 
 import jakarta.persistence.*;
 
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,14 +15,31 @@ public class Paper {
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
     long id;
 
-    String paper_title;
-    int duration;
-    int attempts;
-    LocalDate publish_start;
-    LocalDate publish_end;
+    String title;
+    int durationMinutes;
+    int maxAttempts;
+    LocalDate publishStart;
+    LocalDate publishEnd;
+    boolean randomize;
     @OneToMany(mappedBy = "paper", cascade = CascadeType.ALL)
-    List<Question> paper_question;
+    List<Question> paper_question =new ArrayList<>();
     int marks;
+
+
+    public void addQuestion(Question question){
+
+        paper_question.add(question);
+        question.setPaper(this);
+
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
 
     public int getMarks() {
         return marks;
@@ -28,22 +47,6 @@ public class Paper {
 
     public void setMarks(int marks) {
         this.marks = marks;
-    }
-
-    public int getAttempts() {
-        return attempts;
-    }
-
-    public void setAttempts(int attempts) {
-        this.attempts = attempts;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
     }
 
     public long getId() {
@@ -54,6 +57,22 @@ public class Paper {
         this.id = id;
     }
 
+    public int getMaxAttempts() {
+        return maxAttempts;
+    }
+
+    public void setMaxAttempts(int maxAttempts) {
+        this.maxAttempts = maxAttempts;
+    }
+
+    public LocalDate getPublishEnd() {
+        return publishEnd;
+    }
+
+    public void setPublishEnd(LocalDate publishEnd) {
+        this.publishEnd = publishEnd;
+    }
+
     public List<Question> getPaper_question() {
         return paper_question;
     }
@@ -62,27 +81,28 @@ public class Paper {
         this.paper_question = paper_question;
     }
 
-    public String getPaper_title() {
-        return paper_title;
+    public boolean isRandomize() {
+        return randomize;
     }
 
-    public void setPaper_title(String paper_title) {
-        this.paper_title = paper_title;
+    public void setRandomize(boolean randomize) {
+        this.randomize = randomize;
     }
 
-    public LocalDate getPublish_end() {
-        return publish_end;
+    public LocalDate getPublishStart() {
+        return publishStart;
     }
 
-    public void setPublish_end(LocalDate publish_end) {
-        this.publish_end = publish_end;
+    public void setPublishStart(LocalDate publishStart) {
+        this.publishStart = publishStart;
     }
 
-    public LocalDate getPublish_start() {
-        return publish_start;
+    public String getTitle() {
+        return title;
     }
 
-    public void setPublish_start(LocalDate publish_start) {
-        this.publish_start = publish_start;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }
+

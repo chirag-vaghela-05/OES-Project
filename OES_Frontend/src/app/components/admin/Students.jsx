@@ -7,8 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Plus, Users, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcryptjs';
+import API from "../../api/api";
+
 
 export const Students = () => {
   const [students, setStudents] = useState([]);
@@ -23,48 +23,60 @@ export const Students = () => {
     loadStudents();
   }, []);
 
-  const loadStudents = () => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    setStudents(users.filter((u) => u.role === 'STUDENT'));
-  };
+const loadStudents = async () => {
+    try {
+        const response = await API.get("/admin/studentlist");
+        setStudents(response.data);
+    } catch (error) {
+        console.log(error);
+        toast.error("Failed to load students");
+    }
+};
 
-  const handleSubmit = async (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    
-    if (users.some((u) => u.email === formData.email)) {
-      toast.error('Email already exists');
-      return;
+    try {
+       await API.post("/admin/studentlist/createstudent", formData);
+
+        loadStudents();
+
+        setIsDialogOpen(false);
+
+        setFormData({
+            name: "",
+            email: "",
+            password: ""
+        });
+
+        toast.success("Student created successfully!");
+
+    } catch (error) {
+        console.log(error);
+        toast.error("Failed to create student");
+    }
+};
+
+  const handleDelete = async (id) => {
+
+    if (!confirm("Are you sure you want to delete this student?")) {
+        return;
     }
 
-    const passwordHash = await bcrypt.hash(formData.password, 10);
-    const newUser = {
-      id: uuidv4(),
-      name: formData.name,
-      email: formData.email,
-      passwordHash,
-      role: 'STUDENT',
-    };
+    try {
 
-    const updated = [...users, newUser];
-    localStorage.setItem('users', JSON.stringify(updated));
-    
-    loadStudents();
-    setIsDialogOpen(false);
-    setFormData({ name: '', email: '', password: '' });
-    toast.success('Student created successfully!');
-  };
+        await API.delete(`/admin/studentlist/deletestudent/${id}`);
 
-  const handleDelete = (id) => {
-    if (confirm('Are you sure you want to delete this student?')) {
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const updated = users.filter((u) => u.id !== id);
-      localStorage.setItem('users', JSON.stringify(updated));
-      loadStudents();
-      toast.success('Student deleted successfully!');
+        loadStudents();
+
+        toast.success("Student deleted successfully!");
+
+    } catch (error) {
+        console.log(error);
+        toast.error("Failed to delete student");
     }
-  };
+
+};
 
   return (
     <div className="space-y-6">
@@ -143,6 +155,7 @@ export const Students = () => {
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>PASSWORD</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -151,6 +164,7 @@ export const Students = () => {
                   <TableRow key={student.id}>
                     <TableCell>{student.name}</TableCell>
                     <TableCell>{student.email}</TableCell>
+                    <TableCell>{student.password}</TableCell>
                     <TableCell className="text-right">
                       <Button
                         variant="ghost"

@@ -9,6 +9,7 @@ import { useAuth } from '../../context/AuthContext';
 import { toast } from 'sonner';
 import { v4 as uuidv4 } from 'uuid';
 import { Clock, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react';
+import axios from "axios";
 
 export const TakeExam = () => {
   const { paperId } = useParams();
@@ -36,25 +37,28 @@ export const TakeExam = () => {
     }
   }, [timeRemaining]);
 
-  const loadExam = () => {
-    const papers = JSON.parse(localStorage.getItem('papers') || '[]');
-    const foundPaper = papers.find((p) => p.id === paperId);
-    
-    if (!foundPaper) {
-      toast.error('Exam not found');
-      navigate('/student');
-      return;
-    }
 
-    const allQuestions = JSON.parse(localStorage.getItem('questions') || '[]');
-    const examQuestions = allQuestions.filter((q) => 
-      foundPaper.questionIds.includes(q.id)
+  const loadExam = async () => {
+  try {
+
+    const response = await axios.get(
+      `http://localhost:8080/admin/paper/${paperId}`
     );
 
+    const foundPaper = response.data;
+
     setPaper(foundPaper);
-    setQuestions(examQuestions);
+
+    setQuestions(foundPaper.paper_question || []);
+
     setTimeRemaining(foundPaper.durationMinutes * 60);
-  };
+
+  } catch(error) {
+    console.log(error);
+    toast.error("Exam not found");
+    navigate('/student');
+  }
+};
 
   const handleAnswer = (questionId, option) => {
     setAnswers({ ...answers, [questionId]: option });

@@ -2,26 +2,31 @@ package com.examination.DE_Project.model;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Entity
 public class Result {
-
-
 
     @Id
     @GeneratedValue(strategy= GenerationType.SEQUENCE)
     long id;
     @Column(name = "student_id")
-    long studentId;
-    long paper_id;
+    long userId;
+    long paperId;
+    int score;
+    int totalMarks;
+    double percentage;
+    LocalDateTime startTime;
+    String answer;
 
-    int attempt;
-    String student_name;
-    String paper_name;
-    int total_marks;
-    int achieve_marks;
-    Date attempts_date;
+    public String getAnswer() {
+        return answer;
+    }
+
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
 
     public long getId() {
         return id;
@@ -31,68 +36,51 @@ public class Result {
         this.id = id;
     }
 
-    public int getAttempt() {
-        return attempt;
+    public long getPaperId() {
+        return paperId;
     }
 
-    public void setAttempt(int attempt) {
-        this.attempt = attempt;
+    public void setPaperId(long paperId) {
+        this.paperId = paperId;
     }
 
-    public int getAchieve_marks() {
-        return achieve_marks;
+    public double getPercentage() {
+        return percentage;
     }
 
-    public void setAchieve_marks(int achieve_marks) {
-        this.achieve_marks = achieve_marks;
+    public void setPercentage(double percentage) {
+        this.percentage = percentage;
     }
 
-    public Date getAttempts_date() {
-        return attempts_date;
+    public LocalDateTime getStartTime() {
+        return startTime;
     }
 
-    public void setAttempts_date(Date attempts_date) {
-        this.attempts_date = attempts_date;
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
-
-    public String getPaper_name() {
-        return paper_name;
+    public int getScore() {
+        return score;
     }
 
-    public void setPaper_name(String paper_name) {
-        this.paper_name = paper_name;
+    public void setScore(int score) {
+        this.score = score;
     }
 
-    public String getStudent_name() {
-        return student_name;
+    public int getTotalMarks() {
+        return totalMarks;
     }
 
-    public void setStudent_name(String student_name) {
-        this.student_name = student_name;
+    public void setTotalMarks(int totalMarks) {
+        this.totalMarks = totalMarks;
     }
 
-    public int getTotal_marks() {
-        return total_marks;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setTotal_marks(int total_marks) {
-        this.total_marks = total_marks;
-    }
-
-    public long getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(long studentId) {
-        this.studentId = studentId;
-    }
-
-    public long getPaper_id() {
-        return paper_id;
-    }
-
-    public void setPaper_id(long paper_id) {
-        this.paper_id = paper_id;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 }

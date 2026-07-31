@@ -7,7 +7,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 import { Plus, Edit, Trash2, FileQuestion } from 'lucide-react';
 import { toast } from 'sonner';
-import { v4 as uuidv4 } from 'uuid';
 
 export const Questions = () => {
   const API_BASE = "http://localhost:8080/admin";
@@ -24,20 +23,23 @@ export const Questions = () => {
     marks: 2,
     imageUrl: null,
     timePerQuestion: 60,
+    paperId: ''
   });
+
+  const [papers, setPapers] = useState([]);
+
+
 
   useEffect(() => {
     loadQuestions();
+    loadPapers();
   }, []);
 
-  // const loadQuestions = () => {
-  //   const data = localStorage.getItem('questions');
-  //   setQuestions(data ? JSON.parse(data) : []);
-  // };
+  
 
   const loadQuestions = async () => {
   try {
-    const res = await fetch(`${API_BASE}/Questions`);
+    const res = await fetch(`${API_BASE}/questions`);
     const data = await res.json();
     setQuestions(data);
   } catch (err) {
@@ -46,32 +48,16 @@ export const Questions = () => {
   }
 };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-
-  //   if (editingQuestion) {
-  //     // Update existing question
-  //     const updated = questions.map((q) =>
-  //       q.id === editingQuestion.id ? { ...editingQuestion, ...formData } : q
-  //     );
-  //     localStorage.setItem('questions', JSON.stringify(updated));
-  //     toast.success('Question updated successfully!');
-  //   } else {
-  //     // Create new question
-  //     const newQuestion = {
-  //       id: uuidv4(),
-  //       ...formData,
-  //     };
-  //     const updated = [...questions, newQuestion];
-  //     localStorage.setItem('questions', JSON.stringify(updated));
-  //     toast.success('Question created successfully!');
-  //   }
-
-  //   loadQuestions();
-  //   setIsDialogOpen(false);
-  //   resetForm();
-  // };
-
+const loadPapers = async () => {
+  try {
+    const res = await fetch(`${API_BASE}/paper`);
+    const data = await res.json();
+    setPapers(data);
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to load papers");
+  }
+};
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -79,7 +65,7 @@ export const Questions = () => {
   try {
     if (editingQuestion) {
       // UPDATE
-      await fetch(`${API_BASE}/Questions/updatequestion`, {
+      await fetch(`${API_BASE}/questions/updatequestion`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -93,7 +79,7 @@ export const Questions = () => {
       toast.success("Question updated!");
     } else {
       // CREATE
-      await fetch(`${API_BASE}/Questions/addquestion`, {
+      await fetch(`${API_BASE}/questions/addquestion`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -119,20 +105,13 @@ export const Questions = () => {
     setIsDialogOpen(true);
   };
 
-  // const handleDelete = (id) => {
-  //   if (confirm('Are you sure you want to delete this question?')) {
-  //     const updated = questions.filter((q) => q.id !== id);
-  //     localStorage.setItem('questions', JSON.stringify(updated));
-  //     loadQuestions();
-  //     toast.success('Question deleted successfully!');
-  //   }
-  // };
+  
 
 
   const handleDelete = async (id) => {
   if (confirm("Are you sure?")) {
     try {
-      await fetch(`${API_BASE}/Questions/deletequestion/${id}`, {
+      await fetch(`${API_BASE}/questions/deletequestion/${id}`, {
         method: "DELETE",
       });
 

@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui
 import { Button } from '../ui/button';
 import { useAuth } from '../../context/AuthContext';
 import { FileText, Clock, PlayCircle } from 'lucide-react';
+import axios from "axios";
 
 export const ExamList = () => {
   const [papers, setPapers] = useState([]);
@@ -15,20 +16,33 @@ export const ExamList = () => {
     loadData();
   }, []);
 
-  const loadData = () => {
-    const allPapers = JSON.parse(localStorage.getItem('papers') || '[]');
-    const allAttempts = JSON.parse(localStorage.getItem('examAttempts') || '[]');
-    
+  const loadData = async () => {
+  try {
+
+    const paperResponse = await axios.get(
+      "http://localhost:8080/admin/paper"
+    );
+
+    const allPapers = paperResponse.data;
+
     const now = new Date();
+
     const activePapers = allPapers.filter((p) => {
       const start = new Date(p.publishStart);
       const end = new Date(p.publishEnd);
+
       return now >= start && now <= end;
     });
-    
+
     setPapers(activePapers);
-    setAttempts(allAttempts.filter((a) => a.userId === user?.id));
-  };
+
+    // temporary because attempts are not connected with backend yet
+    setAttempts([]);
+
+  } catch(error) {
+    console.log(error);
+  }
+};
 
   const getAttemptCount = (paperId) => {
     return attempts.filter(a => a.paperId === paperId).length;
@@ -79,7 +93,7 @@ export const ExamList = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <FileText className="w-4 h-4 text-gray-500" />
-                      <span>{paper.questionIds.length} questions</span>
+                      <span>{paper.paper_question?.length || 0} questions</span>
                     </div>
                   </div>
                   
