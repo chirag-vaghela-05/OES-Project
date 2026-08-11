@@ -25,6 +25,13 @@ public class Paperservice {
         return repo.findAll();
     }
 
+    public Paper getPaperById(Long id) {
+
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Paper Not Found"));
+
+    }
+
     public List<Question> getQuestion(long id){
         Paper paper= repo.findById(id).orElseThrow(()->new RuntimeException("Paper Not Found"));
 

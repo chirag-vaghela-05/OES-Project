@@ -4,29 +4,28 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
-
 @Entity
 public class Result {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     long id;
+
     @Column(name = "student_id")
     long userId;
+
     long paperId;
+
+    long attemptId;
+
     int score;
+
     int totalMarks;
+
     double percentage;
+
     LocalDateTime startTime;
-    String answer;
 
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
 
     public long getId() {
         return id;
@@ -36,6 +35,7 @@ public class Result {
         this.id = id;
     }
 
+
     public long getPaperId() {
         return paperId;
     }
@@ -43,6 +43,16 @@ public class Result {
     public void setPaperId(long paperId) {
         this.paperId = paperId;
     }
+
+
+    public long getAttemptId() {
+        return attemptId;
+    }
+
+    public void setAttemptId(long attemptId) {
+        this.attemptId = attemptId;
+    }
+
 
     public double getPercentage() {
         return percentage;
@@ -52,6 +62,7 @@ public class Result {
         this.percentage = percentage;
     }
 
+
     public LocalDateTime getStartTime() {
         return startTime;
     }
@@ -59,6 +70,7 @@ public class Result {
     public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
+
 
     public int getScore() {
         return score;
@@ -68,6 +80,7 @@ public class Result {
         this.score = score;
     }
 
+
     public int getTotalMarks() {
         return totalMarks;
     }
@@ -75,6 +88,7 @@ public class Result {
     public void setTotalMarks(int totalMarks) {
         this.totalMarks = totalMarks;
     }
+
 
     public long getUserId() {
         return userId;

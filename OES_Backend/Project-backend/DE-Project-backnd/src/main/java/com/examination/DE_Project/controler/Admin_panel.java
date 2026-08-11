@@ -61,11 +61,11 @@ public class Admin_panel {
         //list of paper
         return service_paper.getallpaper();
     }
-//
-//    @PostMapping("/paper/create")
-//    public Paper createpaper(@RequestBody Paper paper){
-//        return service_paper.createpaper(paper);
-//    }
+
+    @GetMapping("/paper/{id}")
+    public Paper getPaperById(@PathVariable Long id) {
+        return service_paper.getPaperById(id);
+    }
 
 @PostMapping("/paper/create")
 public Paper createpaper(@RequestBody PaperRequestDTO paperRequestDTO){
