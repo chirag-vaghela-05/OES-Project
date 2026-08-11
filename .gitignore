@@ -1,13 +1,21 @@
 # React
+
 OES_Frontend/node_modules/
 OES_Frontend/dist/
 
 # IntelliJ IDEA
+
 .idea/
 **/.idea/
 
 # Spring Boot build files
+
 **/target/
 
 # Environment files
+
 .env
+
+# Spring Boot configuration
+
+**/src/main/resources/application.properties
